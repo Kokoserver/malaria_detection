@@ -13,7 +13,7 @@ app = FastAPI()
 
 
 def get_model(file):
-    model = torch.hub.load("WongKinYiu/yolov7", "custom", "best.pt", source='github', verbose=False)
+    model = torch.hub.load("WongKinYiu/yolov7", "custom", "best.pt", source='github', verbose=False, trust_repo=True)
     results = model(file)
     return results, model
 
