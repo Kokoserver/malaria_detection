@@ -12,13 +12,17 @@ import tempfile
 app = FastAPI()
 
 
+def get_model(file):
+    model = torch.hub.load("yolov7", "custom", "best.pt", source='local', verbose=False)
+    results = model(file)
+    return results, model
+
 
 @app.post("/raw")
 async def predict(image: UploadFile):
     image_data = await image.read()
     image = Image.open(BytesIO(image_data))
-    model = torch.hub.load("WongKinYiu/yolov7", "custom", "best.pt", trust_repo=True, verbose=False)
-    results = model(image)
+    results, _ = get_model(image)
     predictions = results.pandas().xyxy[0]
     prediction_list = predictions.values.tolist()
     return {"result": prediction_list}
@@ -28,8 +32,7 @@ async def predict(image: UploadFile):
 async def predict(image: UploadFile):
     image_data = await image.read()
     image = Image.open(BytesIO(image_data))
-    model = torch.hub.load("WongKinYiu/yolov7", "custom", "best.pt", trust_repo=True, verbose=False)
-    results = model(image)
+    results, _  = get_model(image)
 
     # Extract the predictions
     predictions = results.pred[0]  # Get the predictions for the first image (assuming batch size of 1)
@@ -54,8 +57,7 @@ async def predict(image: UploadFile):
 async def predict(image: UploadFile):
     image_data = await image.read()
     image = Image.open(BytesIO(image_data))
-    model = torch.hub.load("WongKinYiu/yolov7", "custom", "best.pt", trust_repo=True, verbose=False)
-    results = model(image)
+    results, model = get_model(image)
 
     # Extract the predictions
     predictions = results.pred[0]
