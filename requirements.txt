@@ -2,3 +2,6 @@ torch
 matplotlib
 numpy
 pillow
+fastapi
+uvicorn
+python-multipart
