@@ -53,6 +53,8 @@ async def predict(image: UploadFile):
 
 
 
+
+
 @app.post("/image")
 async def predict(image: UploadFile):
     image_data = await image.read()
