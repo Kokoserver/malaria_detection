@@ -1,4 +1,6 @@
 
+import os
+from anyio import Path
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
 import torch
@@ -12,10 +14,14 @@ import tempfile
 app = FastAPI()
 
 
+
 def get_model(file):
-    model = torch.hub.load("yolov7", "custom", "best.pt", source='local', verbose=False)
+    path = os.path.join("yolov7")
+    model = torch.hub.load(path, "custom", "best.pt", source='local', verbose=False, trust_repo=True)
     results = model(file)
     return results, model
+
+
 
 
 @app.post("/raw")
