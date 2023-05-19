@@ -1,6 +1,4 @@
 
-import os
-from anyio import Path
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
 import torch
@@ -14,14 +12,10 @@ import tempfile
 app = FastAPI()
 
 
-
 def get_model(file):
-    path = os.path.join("yolov7")
-    model = torch.hub.load(path, "custom", "best.pt", source='local', verbose=False, trust_repo=True)
+    model = torch.hub.load("WongKinYiu/yolov7", "custom", "best.pt", source='github', verbose=False)
     results = model(file)
     return results, model
-
-
 
 
 @app.post("/raw")
@@ -56,8 +50,6 @@ async def predict(image: UploadFile):
         }
         prediction_list.append(prediction)
     return {"result": prediction_list}
-
-
 
 
 
