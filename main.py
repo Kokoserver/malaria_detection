@@ -12,6 +12,7 @@ import tempfile
 app = FastAPI()
 
 
+
 @app.post("/raw")
 async def predict(image: UploadFile):
     image_data = await image.read()
