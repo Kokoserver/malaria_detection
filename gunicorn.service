@@ -1,0 +1,13 @@
+[Unit]
+Description=image detection using yolo7
+After=network.target
+
+[Service]
+User=kokoserver
+Group=kokoserver
+WorkingDirectory=/home/kokoserver/app/src
+Environment="PATH=/home/kokoserver/app/venv/bin"
+ExecStart=/home/kokoserver/app/venv/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target
